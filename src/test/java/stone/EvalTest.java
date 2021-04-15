@@ -15,9 +15,9 @@ public class EvalTest {
     public void evalTest() throws ParseException {
         String testCode = "sum = 0\n" +
                 "i = 1\n" +
-                "while i < 11 {\n" +
+                "while i <= 10 {\n" +
                 "    sum = sum + i\n" +
-                "    i=i+1 \n" +
+                "    i = i+1 \n" +
                 "}\n" +
                 "sum";
         StringReader reader = new StringReader(testCode);

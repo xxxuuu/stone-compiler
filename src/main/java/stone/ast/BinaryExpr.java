@@ -88,6 +88,10 @@ public class BinaryExpr extends ASTList {
                 return a > b ? Const.TRUE : Const.FALSE;
             case "<":
                 return a < b ? Const.TRUE : Const.FALSE;
+            case ">=":
+                return a >= b ? Const.TRUE : Const.FALSE;
+            case "<=":
+                return a <= b ? Const.TRUE : Const.FALSE;
             default:
                 throw new StoneException("bad operator", this);
         }
