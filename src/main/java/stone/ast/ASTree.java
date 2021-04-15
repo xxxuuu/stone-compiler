@@ -1,5 +1,7 @@
 package stone.ast;
 
+import stone.Environment;
+
 import java.util.Iterator;
 
 /**
@@ -16,6 +18,8 @@ public abstract class ASTree implements Iterable<ASTree> {
     public abstract Iterator<ASTree> children();
     /** 查询节点在程序内所处位置 */
     public abstract String location();
+    /** 执行并计算 */
+    public abstract Object eval(Environment e);
     @Override
     public Iterator<ASTree> iterator() {
         return children();

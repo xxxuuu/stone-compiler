@@ -1,5 +1,6 @@
 package stone.ast;
 
+import stone.Environment;
 import stone.Token;
 
 /**
@@ -14,5 +15,10 @@ public class NumberLiteral extends ASTLeaf {
 
     public int value() {
         return this.token().getNumber();
+    }
+
+    @Override
+    public Object eval(Environment e) {
+        return value();
     }
 }

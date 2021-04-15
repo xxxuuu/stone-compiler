@@ -1,5 +1,7 @@
 package stone.ast;
 
+import stone.Environment;
+import stone.StoneException;
 import stone.Token;
 
 import java.util.ArrayList;
@@ -37,6 +39,11 @@ public class ASTLeaf extends ASTree {
     @Override
     public String location() {
         return "at line " + this.token.getLineNumber();
+    }
+
+    @Override
+    public Object eval(Environment e) {
+        throw new StoneException("cannot eval: " + toString(), this);
     }
 
     @Override

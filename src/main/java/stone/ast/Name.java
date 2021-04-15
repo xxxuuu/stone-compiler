@@ -1,5 +1,7 @@
 package stone.ast;
 
+import stone.Environment;
+import stone.StoneException;
 import stone.Token;
 
 /**
@@ -13,5 +15,14 @@ public class Name extends ASTLeaf {
 
     public String name() {
         return this.token().getText();
+    }
+
+    @Override
+    public Object eval(Environment e) {
+        Object val = e.get(name());
+        if(val == null) {
+            throw new StoneException("undefined name: " + name(), this);
+        }
+        return val;
     }
 }

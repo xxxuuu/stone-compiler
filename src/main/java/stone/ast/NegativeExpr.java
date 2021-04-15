@@ -1,5 +1,8 @@
 package stone.ast;
 
+import stone.Environment;
+import stone.StoneException;
+
 import java.util.List;
 
 /**
@@ -14,5 +17,14 @@ public class NegativeExpr extends ASTList {
     @Override
     public String toString() {
         return "-" + operand();
+    }
+
+    @Override
+    public Object eval(Environment e) {
+        Object v = operand().eval(e);
+        if(v instanceof Integer) {
+            return -(Integer) v;
+        }
+        throw new StoneException("bad type for -", this);
     }
 }

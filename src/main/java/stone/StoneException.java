@@ -1,5 +1,7 @@
 package stone;
 
+import stone.ast.ASTree;
+
 /**
  * Token 异常
  * @author XUQING
@@ -8,5 +10,9 @@ package stone;
 public class StoneException extends RuntimeException {
     public StoneException(String msg) {
         super(msg);
+    }
+
+    public StoneException(String msg, ASTree ast) {
+        super(msg + " " + ast.location());
     }
 }
