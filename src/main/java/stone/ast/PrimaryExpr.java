@@ -38,7 +38,7 @@ public class PrimaryExpr extends ASTList {
     /**
      * 计算子表达式
      * @param env 换
-     * @param nest 函数调用嵌套层数
+     * @param nest 函数连续调用次数 如 fib(1)(2)(3) 是3次
      * @return
      */
     public Object evalSubExpr(Environment env, int nest) {
