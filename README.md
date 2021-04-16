@@ -1,3 +1,41 @@
 # stone-compiler
 
 根据《两周自制脚本语言》，由 Java 实现的 Stone 语言编译器
+
+### 基本语法
+
+
+```
+// 变量声明与输出
+hello = "hello world!"
+print(hello)
+```
+
+函数
+```
+// 函数使用def定义
+def fib(n) {
+    if n < 2 {
+        // 无需显式return 返回值是最后一条执行语句的结果
+        n
+    } else {
+        fib(n-1) + fib(n-2)
+    }
+}
+// 55
+print(fib(10))
+```
+闭包
+```
+def add(a) {
+    // 闭包使用fun定义
+    fun (b) {
+        a+b
+    }
+}
+three = add(3)
+// 8
+print(three(5))
+// 10
+print(three(7))
+```
