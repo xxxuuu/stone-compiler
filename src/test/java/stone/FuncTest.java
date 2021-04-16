@@ -12,8 +12,7 @@ import java.io.StringReader;
 public class FuncTest {
     @Test
     public void funcTest() throws ParseException {
-        String testCode = "\n" +
-                "def fib(n) {\n" +
+        String testCode = "def fib(n) {\n" +
                 "    if n < 2 {\n" +
                 "        n\n" +
                 "    } else {\n" +
@@ -28,7 +27,7 @@ public class FuncTest {
 
         while(l.peek(0) != Token.EOF) {
             ASTree t = p.parse(l);
-            System.out.println(t.eval(e));
+            System.out.println(t.toString() + " => " + t.eval(e));
         }
     }
 }
