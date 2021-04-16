@@ -3,6 +3,7 @@ package stone.ast;
 import stone.Environment;
 import stone.StoneException;
 
+import javax.swing.*;
 import java.util.List;
 
 /**
@@ -19,17 +20,26 @@ public class Arguments extends Postfix {
         return numChildren();
     }
 
-    /**
-     * 执行函数
-     * @param callerEnv 函数调用语句所处环境，用于计算实参
-     * @param value 函数名对应的抽象语法树的eval结果（Function对象）
-     * @return
-     */
-    @Override
-    public Object eval(Environment callerEnv, Object value) {
-        if(!(value instanceof  Function)) {
-            throw new StoneException("bad function", this);
+    /** 原生函数执行 */
+    private Object nativeEval(Environment callerEnv, Object value) {
+        NativeFunction func = (NativeFunction) value;
+        int nparams = func.numOfParameters();
+        if(size() != nparams) {
+            throw new StoneException("bad number of arguments", this);
         }
+
+        Object[] args = new Object[nparams];
+        int num = 0;
+        // 计算实参表达式
+        for(ASTree t : this) {
+            args[num++] = t.eval(callerEnv);
+        }
+
+        return func.invoke(this, args);
+    }
+
+    /** 普通函数执行 */
+    private Object normalEval(Environment callerEnv, Object value) {
         Function func = (Function) value;
         ParameterList params = func.parameters();
         if(size() != params.size()) {
@@ -44,5 +54,21 @@ public class Arguments extends Postfix {
         }
         // 执行函数
         return func.body().eval(newEnv);
+    }
+
+    /**
+     * 执行函数
+     * @param callerEnv 函数调用语句所处环境，用于计算实参
+     * @param value 函数名对应的抽象语法树的eval结果（Function对象）
+     * @return
+     */
+    @Override
+    public Object eval(Environment callerEnv, Object value) {
+        if(value instanceof  Function) {
+            return normalEval(callerEnv, value);
+        } else if(value instanceof NativeFunction) {
+            return nativeEval(callerEnv, value);
+        }
+        throw new StoneException("bad function", this);
     }
 }
