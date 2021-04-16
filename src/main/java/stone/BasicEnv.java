@@ -22,4 +22,20 @@ public class BasicEnv implements Environment {
     public Object get(String name) {
         return vals.get(name);
     }
+
+    @Override
+    public void putNew(String name, Object value) {
+        this.put(name, value);
+    }
+
+    @Override
+    public Environment where(String name) {
+        if(this.get(name) != null) {
+            return this;
+        }
+        return null;
+    }
+
+    @Override
+    public void setOuter(Environment e) { }
 }

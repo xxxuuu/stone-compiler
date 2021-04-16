@@ -71,7 +71,6 @@ public class BinaryExpr extends ASTList {
         int a = lvalue;
         int b = rvalue;
         switch (op) {
-
             case "+":
                 return a+b;
             case "-":
