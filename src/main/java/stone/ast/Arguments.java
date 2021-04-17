@@ -1,9 +1,10 @@
 package stone.ast;
 
 import stone.Environment;
+import stone.Function;
+import stone.NativeFunction;
 import stone.StoneException;
 
-import javax.swing.*;
 import java.util.List;
 
 /**

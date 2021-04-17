@@ -39,3 +39,25 @@ print(three(5))
 // 10
 print(three(7))
 ```
+类与继承
+```
+// class 定义类
+class Position {
+    x = y = 0
+    def move(nx, ny) {
+        x = nx; y = ny
+    }
+}
+// extends 继承
+class Pos3D extends Position {
+    z = 0
+    def move(nx, ny, nz) {
+        x = nx; y = ny; z = nz
+    }
+}
+// 用 new 来实例化对象
+p = Pos3D.new
+p.move(3, 4, 5)
+// 12
+print(p.x + p.y + p.z)
+```

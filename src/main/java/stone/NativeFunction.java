@@ -1,7 +1,8 @@
-package stone.ast;
+package stone;
 
 import stone.Environment;
 import stone.StoneException;
+import stone.ast.ASTree;
 
 import java.lang.reflect.Method;
 

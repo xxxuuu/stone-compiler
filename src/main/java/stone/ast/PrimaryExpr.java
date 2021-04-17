@@ -16,12 +16,12 @@ public class PrimaryExpr extends ASTList {
         return c.size() == 1 ? c.get(0) : new PrimaryExpr(c);
     }
 
-    /** 返回字面量、函数名 */
+    /** 返回字面量、函数、对象名 */
     public ASTree operand() {
         return child(0);
     }
 
-    /** 对于函数调用，返回实参序列 */
+    /** 对于函数调用，返回实参序列；对于对象调用，返回属性、函数名 */
     public Postfix postfix(int nest) {
         return (Postfix)child(numChildren() - nest - 1);
     }

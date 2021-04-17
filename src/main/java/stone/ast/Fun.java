@@ -1,6 +1,7 @@
 package stone.ast;
 
 import stone.Environment;
+import stone.Function;
 
 import java.util.List;
 

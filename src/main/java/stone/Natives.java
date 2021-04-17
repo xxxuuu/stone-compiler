@@ -1,7 +1,5 @@
 package stone;
 
-import stone.ast.NativeFunction;
-
 import javax.swing.*;
 import java.lang.reflect.Method;
 
