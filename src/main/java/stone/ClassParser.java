@@ -10,7 +10,7 @@ import static stone.Parser.rule;
  * @author XUQING
  * @date 2021/4/17
  */
-public class ClassParser extends FuncParser {
+public class ClassParser extends ClosureParser {
     Parser member = rule().or(def, simple);
     Parser classBody = rule(ClassBody.class).sep("{").option(member)
             .repeat(rule().sep(";", Token.EOL).option(member))

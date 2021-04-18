@@ -5,7 +5,7 @@ import stone.Environment;
 import java.util.List;
 
 /**
- * EBNF: postfix := "." IDENTIFIER | "(" [args] ")"
+ * EBNF: postfix :=  "[" expr "]" | "." IDENTIFIER | "(" [args] ")"
  * @author XUQING
  * @date 2021/4/15
  */

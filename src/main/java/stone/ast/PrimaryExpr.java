@@ -5,7 +5,7 @@ import stone.Environment;
 import java.util.List;
 
 /**
- * 字面量、变量名、函数调用等基本表达式
+ * 字面量、变量名、函数调用、数组等基本元素和表达式
  * @author XUQING
  * @date 2021/4/14
  */
