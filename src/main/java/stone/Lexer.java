@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public class Lexer {
     /** 匹配注释、整型字面量、字符串字面量、标识符、运算符的模式 */
     public static String regexPat = "\\s*((//.*)|([0-9]+)|(\"(\\\\\"|\\\\\\\\|\\\\n|[^\"])*\")"
-                                + "|[A-Z_a-z][A-z_a-z0-9]*|==|<=|>=|&&|\\|\\||\\p{Punct})?";
+                                + "|[A-Z_a-z][A-Z_a-z0-9]*|==|<=|>=|&&|\\|\\||\\p{Punct})?";
     private Pattern pattern = Pattern.compile(regexPat);
     /** token 暂存队列 */
     private List<Token> queue = new ArrayList<>();
