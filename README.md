@@ -64,12 +64,17 @@ print(p.x + p.y + p.z)
 数组
 ```
 a = [2, 3, 4]
+
 // 3
 print(a[1])
+
 a[1] = "three"
+
 // a[1]: three
 print("a[1]: " + a[1])
-b = [["one\", 1], ["two", 2]]
+
+b = [["one", 1], ["two", 2]]
+
 // two: 2
 print(b[1][0] + ": " + b[1][1])
 ```
