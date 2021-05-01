@@ -1,8 +1,8 @@
-package stone;
+package stone.parser;
 
 import stone.ast.*;
 
-import static stone.Parser.rule;
+import static stone.parser.Parser.rule;
 
 /**
  * @author XUQING

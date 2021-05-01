@@ -1,10 +1,11 @@
-package stone;
+package stone.parser;
 
+import stone.Token;
 import stone.ast.ClassBody;
 import stone.ast.ClassStmnt;
 import stone.ast.Dot;
 
-import static stone.Parser.rule;
+import static stone.parser.Parser.rule;
 
 /**
  * @author XUQING

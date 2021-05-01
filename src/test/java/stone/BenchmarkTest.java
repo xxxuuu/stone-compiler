@@ -2,6 +2,7 @@ package stone;
 
 import org.junit.jupiter.api.Test;
 import stone.ast.ASTree;
+import stone.parser.ClosureParser;
 
 import java.io.StringReader;
 

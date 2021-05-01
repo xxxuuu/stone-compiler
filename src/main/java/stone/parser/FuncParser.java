@@ -1,10 +1,10 @@
-package stone;
+package stone.parser;
 
 import stone.ast.Arguments;
 import stone.ast.DefStmnt;
 import stone.ast.ParameterList;
 
-import static stone.Parser.rule;
+import static stone.parser.Parser.rule;
 
 /**
  * @author XUQING

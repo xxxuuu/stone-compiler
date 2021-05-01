@@ -1,9 +1,12 @@
-package stone;
+package stone.parser;
 
+import stone.Lexer;
+import stone.ParseException;
+import stone.Token;
 import stone.ast.*;
-import stone.Parser.Operators;
+import stone.parser.Parser.Operators;
 
-import static stone.Parser.rule;
+import static stone.parser.Parser.rule;
 
 import java.util.HashSet;
 

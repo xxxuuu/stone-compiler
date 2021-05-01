@@ -23,13 +23,17 @@ public class DefStmnt extends ASTList {
         return (ParameterList)child(1);
     }
 
+    public TypeTag type() {
+        return (TypeTag) child(2);
+    }
+
     public BlockStmnt body() {
-        return (BlockStmnt)child(2);
+        return (BlockStmnt)child(3);
     }
 
     @Override
     public String toString() {
-        return "(def " + name() + " " + parameters() + " " + body() + ")";
+        return "(def " + name() + " " + parameters() + " " + type() + " " + body() + ")";
     }
 
     @Override

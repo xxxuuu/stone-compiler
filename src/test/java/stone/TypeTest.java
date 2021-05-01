@@ -3,27 +3,26 @@ package stone;
 import org.junit.jupiter.api.Test;
 import stone.ast.ASTree;
 import stone.parser.ArrayParser;
+import stone.parser.TypeParser;
 
 import java.io.StringReader;
+import java.lang.reflect.Type;
 
 /**
  * @author XUQING
- * @date 2021/4/18
+ * @date 2021/5/1
  */
-public class ArrayTest {
+public class TypeTest {
     @Test
-    public void typeTest() throws ParseException {
-        String testCode = "a = [2, 3, 4]\n" +
-                "print(a[1])\n" +
-                "a[1] = \"three\"\n" +
-                "print(\"a[1]: \" + a[1])\n" +
-                "b = [[\"one\", 1], [\"two\", 2]]\n" +
-                "print(b[1][0] + \": \" + b[1][1])";
+    public void arrayTest() throws ParseException {
+        String testCode = "def inc(n: Int): Int { n + 1 }\n"
+                + "var i: Int = 1\n"
+                + "print(inc(i))";
         StringReader reader = new StringReader(testCode);
         Lexer l = new Lexer(reader);
         BasicEnv e = new BasicEnv();
         new Natives().environment(e);
-        ArrayParser p = new ArrayParser();
+        TypeParser p = new TypeParser();
         while(l.peek(0) != Token.EOF) {
             ASTree t = p.parse(l);
             t.eval(e);
