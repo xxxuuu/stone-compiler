@@ -1,7 +1,7 @@
 package stone;
 
-import stone.Environment;
-import stone.NestedEnv;
+import stone.env.Environment;
+import stone.env.NestedEnv;
 import stone.ast.BlockStmnt;
 import stone.ast.ParameterList;
 

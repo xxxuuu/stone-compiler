@@ -1,7 +1,7 @@
 package stone.ast;
 
-import stone.Environment;
-import stone.StoneException;
+import stone.env.Environment;
+import stone.exception.StoneException;
 
 import java.util.Iterator;
 import java.util.List;

@@ -2,6 +2,8 @@ package stone;
 
 import stone.ast.ClassBody;
 import stone.ast.ClassStmnt;
+import stone.env.Environment;
+import stone.exception.StoneException;
 
 /**
  * 类的定义信息

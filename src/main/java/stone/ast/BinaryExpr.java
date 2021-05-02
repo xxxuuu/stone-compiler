@@ -1,8 +1,8 @@
 package stone.ast;
 
 import stone.Const;
-import stone.Environment;
-import stone.StoneException;
+import stone.env.Environment;
+import stone.exception.StoneException;
 import stone.StoneObject;
 import static stone.StoneObject.AccessException;
 

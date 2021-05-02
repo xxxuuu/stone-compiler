@@ -1,7 +1,7 @@
 package stone.ast;
 
-import stone.Environment;
-import stone.StoneException;
+import stone.env.Environment;
+import stone.exception.StoneException;
 import stone.Token;
 
 /**

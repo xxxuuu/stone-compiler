@@ -1,10 +1,9 @@
 package stone.ast;
 
 import stone.ClassInfo;
-import stone.Environment;
+import stone.env.Environment;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 /**
  * @author XUQING

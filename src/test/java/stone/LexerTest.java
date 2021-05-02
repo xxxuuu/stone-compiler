@@ -1,10 +1,9 @@
 package stone;
 
 import org.junit.jupiter.api.Test;
+import stone.exception.ParseException;
 
 import java.io.StringReader;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * 词法分析器单元测试

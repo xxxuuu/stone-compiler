@@ -1,5 +1,7 @@
 package stone;
 
+import stone.exception.StoneException;
+
 /**
  * 单词（token）
  * @author XUQING

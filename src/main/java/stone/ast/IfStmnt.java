@@ -1,7 +1,7 @@
 package stone.ast;
 
 import stone.Const;
-import stone.Environment;
+import stone.env.Environment;
 
 import java.util.List;
 

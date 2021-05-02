@@ -1,5 +1,7 @@
 package stone;
 
+import stone.env.Environment;
+
 /**
  * 对象信息
  * @author XUQING

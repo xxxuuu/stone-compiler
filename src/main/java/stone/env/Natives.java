@@ -1,4 +1,7 @@
-package stone;
+package stone.env;
+
+import stone.NativeFunction;
+import stone.exception.StoneException;
 
 import javax.swing.*;
 import java.lang.reflect.Method;

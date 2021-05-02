@@ -2,6 +2,9 @@ package stone;
 
 import org.junit.jupiter.api.Test;
 import stone.ast.ASTree;
+import stone.env.BasicEnv;
+import stone.env.Natives;
+import stone.exception.ParseException;
 import stone.parser.TypeParser;
 
 import java.io.StringReader;

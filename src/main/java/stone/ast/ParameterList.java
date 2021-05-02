@@ -1,6 +1,6 @@
 package stone.ast;
 
-import stone.Environment;
+import stone.env.Environment;
 
 import java.util.List;
 

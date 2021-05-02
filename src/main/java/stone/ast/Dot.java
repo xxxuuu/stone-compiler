@@ -1,6 +1,10 @@
 package stone.ast;
 
 import stone.*;
+import stone.env.Environment;
+import stone.env.NestedEnv;
+import stone.exception.StoneException;
+
 import static stone.StoneObject.AccessException;
 
 import java.util.List;

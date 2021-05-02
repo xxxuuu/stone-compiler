@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Constructor;
 
 import stone.Lexer;
-import stone.ParseException;
+import stone.exception.ParseException;
 import stone.Token;
 import stone.ast.ASTree;
 import stone.ast.ASTLeaf;

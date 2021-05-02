@@ -1,9 +1,9 @@
 package stone.ast;
 
-import stone.Environment;
+import stone.env.Environment;
 import stone.Function;
 import stone.NativeFunction;
-import stone.StoneException;
+import stone.exception.StoneException;
 
 import java.util.List;
 

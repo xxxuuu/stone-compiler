@@ -1,7 +1,7 @@
 package stone.parser;
 
 import stone.Lexer;
-import stone.ParseException;
+import stone.exception.ParseException;
 import stone.Token;
 import stone.ast.*;
 import stone.parser.Parser.Operators;

@@ -1,4 +1,4 @@
-package stone;
+package stone.env;
 
 import java.util.HashMap;
 
