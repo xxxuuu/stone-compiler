@@ -2,11 +2,9 @@ package stone;
 
 import org.junit.jupiter.api.Test;
 import stone.ast.ASTree;
-import stone.parser.ArrayParser;
 import stone.parser.TypeParser;
 
 import java.io.StringReader;
-import java.lang.reflect.Type;
 
 /**
  * @author XUQING
@@ -14,7 +12,7 @@ import java.lang.reflect.Type;
  */
 public class TypeTest {
     @Test
-    public void arrayTest() throws ParseException {
+    public void typeTest() throws ParseException {
         String testCode = "def inc(n: Int): Int { n + 1 }\n"
                 + "var i: Int = 1\n"
                 + "print(inc(i))";

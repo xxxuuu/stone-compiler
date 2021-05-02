@@ -12,7 +12,7 @@ import java.io.StringReader;
  */
 public class ArrayTest {
     @Test
-    public void typeTest() throws ParseException {
+    public void arrayTest() throws ParseException {
         String testCode = "a = [2, 3, 4]\n" +
                 "print(a[1])\n" +
                 "a[1] = \"three\"\n" +
