@@ -1,9 +1,12 @@
 package stone.ast;
 
+import stone.TypeInfo;
 import stone.env.Environment;
 import stone.Function;
 import stone.NativeFunction;
+import stone.env.TypeEnv;
 import stone.exception.StoneException;
+import stone.exception.TypeException;
 
 import java.util.List;
 
@@ -13,6 +16,9 @@ import java.util.List;
  * @date 2021/4/15
  */
 public class Arguments extends Postfix {
+    protected TypeInfo[] argTypes;
+    protected TypeInfo.FunctionType funcType;
+
     public Arguments(List<ASTree> c) {
         super(c);
     }
@@ -71,5 +77,29 @@ public class Arguments extends Postfix {
             return nativeEval(callerEnv, value);
         }
         throw new StoneException("bad function", this);
+    }
+
+    @Override
+    public TypeInfo typeCheck(TypeEnv e, TypeInfo target) throws TypeException {
+        if(!(target instanceof TypeInfo.FunctionType)) {
+            throw new TypeException("bad function", this);
+        }
+        this.funcType = (TypeInfo.FunctionType) target;
+        TypeInfo[] params = funcType.parameterTypes;
+        if(size() != params.length) {
+            throw new TypeException("bad number of arguments", this);
+        }
+        this.argTypes = new TypeInfo[params.length];
+        int num = 0;
+        for(ASTree t : this) {
+            TypeInfo info = argTypes[num] = t.typeCheck(e);
+            info.assertSubtypeOf(params[num++], e, this);
+        }
+        return funcType.returnType;
+    }
+
+    @Override
+    public TypeInfo typeCheck(TypeEnv e) throws TypeException {
+        return null;
     }
 }

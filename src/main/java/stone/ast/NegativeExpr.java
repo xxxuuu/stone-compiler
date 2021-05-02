@@ -1,7 +1,10 @@
 package stone.ast;
 
+import stone.TypeInfo;
 import stone.env.Environment;
+import stone.env.TypeEnv;
 import stone.exception.StoneException;
+import stone.exception.TypeException;
 
 import java.util.List;
 
@@ -17,6 +20,13 @@ public class NegativeExpr extends ASTList {
     @Override
     public String toString() {
         return "-" + operand();
+    }
+
+    @Override
+    public TypeInfo typeCheck(TypeEnv e) throws TypeException {
+        TypeInfo t = operand().typeCheck(e);
+        t.assertSubtypeOf(TypeInfo.INT, e, this);
+        return TypeInfo.INT;
     }
 
     @Override

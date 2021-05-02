@@ -1,6 +1,9 @@
 package stone.ast;
 
+import stone.TypeInfo;
 import stone.env.Environment;
+import stone.env.TypeEnv;
+import stone.exception.TypeException;
 
 import java.util.List;
 
@@ -47,5 +50,18 @@ public class PrimaryExpr extends ASTList {
             return postfix(nest).eval(env, target);
         }
         return operand().eval(env);
+    }
+
+    @Override
+    public TypeInfo typeCheck(TypeEnv e) throws TypeException {
+        return typeCheck(e, 0);
+    }
+
+    public TypeInfo typeCheck(TypeEnv e, int nest) throws TypeException {
+        if (hasPostfix(nest)) {
+            TypeInfo target = typeCheck(e, nest + 1);
+            return postfix(nest).typeCheck(e, target);
+        }
+        return operand().typeCheck(e);
     }
 }

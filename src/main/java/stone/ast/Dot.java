@@ -3,7 +3,9 @@ package stone.ast;
 import stone.*;
 import stone.env.Environment;
 import stone.env.NestedEnv;
+import stone.env.TypeEnv;
 import stone.exception.StoneException;
+import stone.exception.TypeException;
 
 import static stone.StoneObject.AccessException;
 
@@ -52,5 +54,10 @@ public class Dot extends Postfix {
             } catch (AccessException ex) {}
         }
         throw new StoneException("bad member access: " + member, this);
+    }
+
+    @Override
+    public TypeInfo typeCheck(TypeEnv e, TypeInfo target) throws TypeException {
+        return null;
     }
 }

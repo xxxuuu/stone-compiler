@@ -1,6 +1,9 @@
 package stone.ast;
 
+import stone.TypeInfo;
 import stone.env.Environment;
+import stone.env.TypeEnv;
+import stone.exception.TypeException;
 
 import java.util.List;
 
@@ -9,6 +12,8 @@ import java.util.List;
  * @date 2021/4/14
  */
 public class BlockStmnt extends ASTList {
+    TypeInfo type;
+
     public BlockStmnt(List<ASTree> c) { super(c); }
 
     @Override
@@ -20,5 +25,16 @@ public class BlockStmnt extends ASTList {
             }
         }
         return result;
+    }
+
+    @Override
+    public TypeInfo typeCheck(TypeEnv e) throws TypeException {
+        type = TypeInfo.INT;
+        for(ASTree t : this) {
+            if(!(t instanceof NullStmnt)) {
+                type = t.typeCheck(e);
+            }
+        }
+        return type;
     }
 }

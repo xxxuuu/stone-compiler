@@ -1,7 +1,10 @@
 package stone.ast;
 
 import stone.Const;
+import stone.TypeInfo;
 import stone.env.Environment;
+import stone.env.TypeEnv;
+import stone.exception.TypeException;
 
 import java.util.List;
 
@@ -34,5 +37,20 @@ public class IfStmnt extends ASTList {
         }
         ASTree b = elseBlock();
         return (b == null) ? 0 : b.eval(e);
+    }
+
+    @Override
+    public TypeInfo typeCheck(TypeEnv e) throws TypeException {
+        TypeInfo condType = condition().typeCheck(e);
+        condType.assertSubtypeOf(TypeInfo.INT, e, this);
+        TypeInfo thenType = thenBlock().typeCheck(e);
+        TypeInfo elseType;
+        ASTree elseBlock = elseBlock();
+        if(elseBlock == null) {
+            elseType = TypeInfo.INT;
+        } else {
+            elseType = elseBlock.typeCheck(e);
+        }
+        return thenType.union(elseType, e);
     }
 }

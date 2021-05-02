@@ -1,7 +1,10 @@
 package stone.ast;
 
 import stone.Const;
+import stone.TypeInfo;
 import stone.env.Environment;
+import stone.env.TypeEnv;
+import stone.exception.TypeException;
 
 import java.util.List;
 
@@ -31,5 +34,13 @@ public class WhileStmnt extends ASTList {
             }
             result = body().eval(e);
         }
+    }
+
+    @Override
+    public TypeInfo typeCheck(TypeEnv e) throws TypeException {
+        TypeInfo condType = condition().typeCheck(e);
+        condType.assertSubtypeOf(TypeInfo.INT, e, this);
+        TypeInfo bodyType = body().typeCheck(e);
+        return bodyType.union(condType, e);
     }
 }

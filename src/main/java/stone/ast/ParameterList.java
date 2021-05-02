@@ -1,6 +1,8 @@
 package stone.ast;
 
+import stone.TypeInfo;
 import stone.env.Environment;
+import stone.exception.TypeException;
 
 import java.util.List;
 
@@ -24,6 +26,15 @@ public class ParameterList extends ASTList {
 
     public int size() {
         return numChildren();
+    }
+
+    public TypeInfo[] types() throws TypeException {
+        int s = size();
+        TypeInfo[] result = new TypeInfo[s];
+        for(int i = 0; i < s; i++) {
+            result[i] = TypeInfo.get(typeTag(i));
+        }
+        return result;
     }
 
     /** 将实参赋值给形参 */

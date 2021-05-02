@@ -1,7 +1,10 @@
 package stone.ast;
 
+import stone.TypeInfo;
 import stone.env.Environment;
 import stone.Function;
+import stone.env.TypeEnv;
+import stone.exception.TypeException;
 
 import java.util.List;
 
@@ -11,6 +14,9 @@ import java.util.List;
  * @date 2021/4/15
  */
 public class DefStmnt extends ASTList {
+    protected TypeInfo.FunctionType funcType;
+    protected TypeEnv bodyEnv;
+
     public DefStmnt(List<ASTree> c) {
         super(c);
     }
@@ -40,5 +46,23 @@ public class DefStmnt extends ASTList {
     public Object eval(Environment e) {
         e.putNew(name(), new Function(parameters(), body(), e));
         return name();
+    }
+
+    @Override
+    public TypeInfo typeCheck(TypeEnv e) throws TypeException {
+        TypeInfo[] params = parameters().types();
+        TypeInfo returnType = TypeInfo.get(type());
+        this.funcType = TypeInfo.function(returnType, params);
+        TypeInfo oldType = e.put(name(), funcType);
+        if(oldType != null) {
+            throw new TypeException("function redefinition: " + name(), this);
+        }
+        this.bodyEnv = new TypeEnv(e);
+        for(int i = 0; i < params.length; i++) {
+            bodyEnv.put(parameters().name(i), params[i]);
+        }
+        TypeInfo bodyType = body().typeCheck(bodyEnv);
+        bodyType.assertSubtypeOf(returnType, e, this);
+        return funcType;
     }
 }

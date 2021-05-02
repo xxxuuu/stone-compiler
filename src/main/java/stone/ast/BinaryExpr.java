@@ -1,9 +1,13 @@
 package stone.ast;
 
 import stone.Const;
+import stone.TypeInfo;
 import stone.env.Environment;
+import stone.env.TypeEnv;
 import stone.exception.StoneException;
 import stone.StoneObject;
+import stone.exception.TypeException;
+
 import static stone.StoneObject.AccessException;
 
 import java.util.List;
@@ -14,6 +18,8 @@ import java.util.List;
  * @date 2020/5/17
  */
 public class BinaryExpr extends ASTList {
+    TypeInfo leftType, rightType;
+
     public BinaryExpr(List<ASTree> list) {
         super(list);
     }
@@ -117,6 +123,35 @@ public class BinaryExpr extends ASTList {
             default:
                 throw new StoneException("bad operator", this);
         }
+    }
+
+    @Override
+    public TypeInfo typeCheck(TypeEnv e) throws TypeException {
+        String op = operator();
+        if("=".equals(op)) {
+            return typeCheckForAssign(e);
+        } else {
+            this.leftType = left().typeCheck(e);
+            this.rightType = right().typeCheck(e);
+            if("+".equals(op)) {
+                return leftType.plus(rightType, e);
+            }
+            if("==".equals(op)) {
+                return TypeInfo.INT;
+            }
+            leftType.assertSubtypeOf(TypeInfo.INT, e, this);
+            rightType.assertSubtypeOf(TypeInfo.INT, e, this);
+            return TypeInfo.INT;
+        }
+    }
+
+    protected TypeInfo typeCheckForAssign(TypeEnv e) throws TypeException {
+        rightType = right().typeCheck(e);
+        ASTree left = left();
+        if(left instanceof Name) {
+            return ((Name) left).typeCheckForAssign(e, rightType);
+        }
+        throw new TypeException("bad assignment", this);
     }
 
     protected Object setField(StoneObject obj, Dot expr, Object rvalue) {

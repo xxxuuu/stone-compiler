@@ -1,6 +1,9 @@
 package stone.ast;
 
+import stone.TypeInfo;
 import stone.env.Environment;
+import stone.env.TypeEnv;
+import stone.exception.TypeException;
 
 import java.util.Iterator;
 
@@ -20,6 +23,8 @@ public abstract class ASTree implements Iterable<ASTree> {
     public abstract String location();
     /** 执行并计算 */
     public abstract Object eval(Environment e);
+    /** 类型检查 */
+    public abstract TypeInfo typeCheck(TypeEnv e) throws TypeException;
     @Override
     public Iterator<ASTree> iterator() {
         return children();

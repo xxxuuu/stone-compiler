@@ -1,6 +1,9 @@
 package stone.ast;
 
+import stone.TypeInfo;
 import stone.env.Environment;
+import stone.env.TypeEnv;
+import stone.exception.TypeException;
 
 import java.util.List;
 
@@ -21,4 +24,13 @@ public abstract class Postfix extends ASTList {
      * @return
      */
     public abstract Object eval(Environment e, Object value);
+
+    /**
+     * 类型检查
+     * @param e 类型环境信息
+     * @param target 前置类型 如函数调用时为函数类型
+     * @return
+     * @throws  TypeException 类型检查错误
+     */
+    public abstract TypeInfo typeCheck(TypeEnv e, TypeInfo target) throws TypeException;
 }

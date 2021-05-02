@@ -1,7 +1,10 @@
 package stone.ast;
 
+import stone.TypeInfo;
 import stone.env.Environment;
+import stone.env.TypeEnv;
 import stone.exception.StoneException;
+import stone.exception.TypeException;
 
 import java.util.List;
 
@@ -34,5 +37,10 @@ public class ArrayRef extends Postfix {
         }
 
         throw new StoneException("bad array access", this);
+    }
+
+    @Override
+    public TypeInfo typeCheck(TypeEnv e, TypeInfo target) throws TypeException {
+        return null;
     }
 }
