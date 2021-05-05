@@ -2,8 +2,7 @@ package stone.env;
 
 import stone.TypeInfo;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 存储类型信息的环境
@@ -11,7 +10,12 @@ import java.util.Map;
  * @date 2021/5/2
  */
 public class TypeEnv {
+    public static class Equation extends ArrayList<TypeInfo.UnknownType> {
+
+    }
+
     TypeEnv outer;
+    protected List<Equation> equations = new LinkedList<>();
     public Map<String, TypeInfo> types;
 
     public TypeEnv() {
@@ -21,6 +25,35 @@ public class TypeEnv {
     public TypeEnv(TypeEnv e) {
         types = new HashMap<>();
         outer = e;
+    }
+
+    public void addEquation(TypeInfo.UnknownType t1, TypeInfo t2) {
+        if(t2.isUnknownType()) {
+            if(t2.toUnknownType().resolved()) {
+                t2 = t2.type();
+            }
+        }
+        Equation eq = find(t1);
+        if(t2.isUnknownType()) {
+            eq.add(t2.toUnknownType());
+        } else {
+            for(TypeInfo.UnknownType t : eq) {
+                t.setType(t2);
+            }
+            equations.remove(eq);
+        }
+    }
+
+    protected Equation find(TypeInfo.UnknownType t) {
+        for(Equation e : equations) {
+            if(e.contains(t)) {
+                return e;
+            }
+        }
+        Equation e = new Equation();
+        e.add(t);
+        equations.add(e);
+        return e;
     }
 
     public TypeInfo get(String name) {

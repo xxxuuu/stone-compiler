@@ -20,13 +20,10 @@ public class TypeInfo {
     public static final TypeInfo INT = new TypeInfo("Int");
     /** String 类型 */
     public static final TypeInfo STRING = new TypeInfo("String");
-    /** 未知类型 */
-    public static final TypeInfo UNKNOWN = new TypeInfo();
 
     String literal;
 
-    private TypeInfo() {
-    }
+    private TypeInfo() {}
 
     private TypeInfo(String literal) {
         this.literal = literal;
@@ -37,46 +34,64 @@ public class TypeInfo {
         return literal;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TypeInfo typeInfo = (TypeInfo) o;
-        return Objects.equals(literal, typeInfo.literal);
+    public TypeInfo type() {
+        return this;
+    }
+
+    public boolean match(TypeInfo obj) {
+        return type() == obj.type();
     }
 
     /** 是否是给定类型的子类 */
     public boolean subtypeOf(TypeInfo superType) {
-        return superType.equals(ANY) || this.equals(superType);
+        return superType.type() == type() || superType.type() == ANY;
     }
 
     public void assertSubtypeOf(TypeInfo type, TypeEnv env, ASTree where) throws TypeException {
-        if(!subtypeOf(type)) {
+        if(type.isUnknownType()) {
+            type.toUnknownType().assertSupertypeOf(this, env, where);
+            return;
+        }
+        if (!subtypeOf(type)) {
             throw new TypeException("type mismatch: cannot convert from " + this + " to " + type, where);
         }
     }
 
     /** 获取与指定类型的共同父类 */
     public TypeInfo union(TypeInfo right, TypeEnv env) {
-        if(this.equals(right)) {
-            return this;
+        if(right.isUnknownType()) {
+            return right.union(this, env);
+        }
+        if(this.match(right)) {
+            return type();
         }
         return ANY;
     }
 
     public boolean isUnknownType() {
-        return this == UNKNOWN;
+        return false;
+    }
+
+    public FunctionType toFunctionType() {
+        return null;
     }
 
     public boolean isFunctionType() {
         return false;
     }
 
+    public UnknownType toUnknownType() {
+        return null;
+    }
+
     public TypeInfo plus(TypeInfo right, TypeEnv e) {
-        if(this.equals(INT) && right.equals(INT)) {
+        if(right.isUnknownType()) {
+            return right.plus(this, e);
+        }
+        if(this.match(INT) && right.match(INT)) {
             return INT;
         }
-        if(this.equals(STRING) && right.equals(STRING)) {
+        if(this.match(STRING) && right.match(STRING)) {
             return STRING;
         }
         return ANY;
@@ -94,13 +109,80 @@ public class TypeInfo {
             return ANY;
         }
         if(TypeTag.UNDEF.equals(name)) {
-            return UNKNOWN;
+            return new UnknownType();
         }
         throw new TypeException("unknown type" + name, tag);
     }
 
     public static FunctionType function(TypeInfo ref, TypeInfo... params) {
         return new FunctionType(ref, params);
+    }
+
+    public static class UnknownType extends TypeInfo {
+        protected TypeInfo type = null;
+
+        public void setType(TypeInfo t) {
+            this.type = t;
+        }
+
+        public boolean resolved() {
+            return type != null;
+        }
+
+        @Override
+        public TypeInfo type() {
+            return type == null ? ANY : type;
+        }
+
+        @Override
+        public void assertSubtypeOf(TypeInfo t, TypeEnv env, ASTree where) throws TypeException {
+            if(resolved()) {
+                this.type.assertSubtypeOf(t, env, where);
+                return;
+            }
+            env.addEquation(this, t);
+        }
+
+        public void assertSupertypeOf(TypeInfo t, TypeEnv env, ASTree where) throws TypeException {
+            if(resolved()) {
+                t.assertSubtypeOf(this.type, env, where);
+                return;
+            }
+            env.addEquation(this, t);
+        }
+
+        @Override
+        public TypeInfo union(TypeInfo right, TypeEnv env) {
+            if(resolved()) {
+                return this.type.union(right, env);
+            }
+            env.addEquation(this, right);
+            return right;
+        }
+
+        @Override
+        public TypeInfo plus(TypeInfo right, TypeEnv e) {
+            if(resolved()) {
+                return type.plus(right, e);
+            }
+            e.addEquation(this, INT);
+            return right.plus(INT, e);
+        }
+
+        @Override
+        public String toString() {
+            return type().toString();
+        }
+
+        @Override
+        public boolean isUnknownType() {
+            return true;
+        }
+
+        @Override
+        public UnknownType toUnknownType() {
+            return this;
+        }
     }
 
     public static class FunctionType extends TypeInfo {
@@ -118,12 +200,25 @@ public class TypeInfo {
         }
 
         @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            if (!super.equals(o)) return false;
-            FunctionType that = (FunctionType) o;
-            return Objects.equals(returnType, that.returnType) && Arrays.equals(parameterTypes, that.parameterTypes);
+        public FunctionType toFunctionType() {
+            return this;
+        }
+
+        @Override
+        public boolean match(TypeInfo obj) {
+            if(!(obj instanceof FunctionType)) {
+                return false;
+            }
+            FunctionType func = (FunctionType) obj;
+            if(parameterTypes.length != func.parameterTypes.length) {
+                return false;
+            }
+            for(int i = 0; i < parameterTypes.length; i++) {
+                if(!parameterTypes[i].match(func.parameterTypes[i])) {
+                    return false;
+                }
+            }
+            return returnType.match(func.returnType);
         }
 
         @Override

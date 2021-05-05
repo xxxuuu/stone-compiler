@@ -48,6 +48,15 @@ public class DefStmnt extends ASTList {
         return name();
     }
 
+    protected void fixUnknown(TypeInfo t) {
+        if(t.isUnknownType()) {
+            TypeInfo.UnknownType ut = t. toUnknownType();
+            if(!ut.resolved()) {
+                ut.setType(TypeInfo.ANY);
+            }
+        }
+    }
+
     @Override
     public TypeInfo typeCheck(TypeEnv e) throws TypeException {
         TypeInfo[] params = parameters().types();
@@ -63,6 +72,12 @@ public class DefStmnt extends ASTList {
         }
         TypeInfo bodyType = body().typeCheck(bodyEnv);
         bodyType.assertSubtypeOf(returnType, e, this);
-        return funcType;
+
+        TypeInfo.FunctionType func = funcType.toFunctionType();
+        for(TypeInfo t : func.parameterTypes) {
+            fixUnknown(t);
+        }
+        fixUnknown(func.returnType);
+        return func;
     }
 }
