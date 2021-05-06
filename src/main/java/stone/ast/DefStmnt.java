@@ -50,7 +50,7 @@ public class DefStmnt extends ASTList {
 
     protected void fixUnknown(TypeInfo t) {
         if(t.isUnknownType()) {
-            TypeInfo.UnknownType ut = t. toUnknownType();
+            TypeInfo.UnknownType ut = t.toUnknownType();
             if(!ut.resolved()) {
                 ut.setType(TypeInfo.ANY);
             }
@@ -73,6 +73,7 @@ public class DefStmnt extends ASTList {
         TypeInfo bodyType = body().typeCheck(bodyEnv);
         bodyType.assertSubtypeOf(returnType, e, this);
 
+        // 为参数和返回值进行类型推论
         TypeInfo.FunctionType func = funcType.toFunctionType();
         for(TypeInfo t : func.parameterTypes) {
             fixUnknown(t);

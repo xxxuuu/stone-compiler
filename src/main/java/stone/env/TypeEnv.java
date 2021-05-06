@@ -37,6 +37,7 @@ public class TypeEnv {
         if(t2.isUnknownType()) {
             eq.add(t2.toUnknownType());
         } else {
+            // 已推论出类型 为等式中其它未知类型设置类型
             for(TypeInfo.UnknownType t : eq) {
                 t.setType(t2);
             }
@@ -44,6 +45,7 @@ public class TypeEnv {
         }
     }
 
+    /** 寻找t所在的等式 */
     protected Equation find(TypeInfo.UnknownType t) {
         for(Equation e : equations) {
             if(e.contains(t)) {

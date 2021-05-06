@@ -49,7 +49,8 @@ public class ASTList extends ASTree {
 
     @Override
     public Object eval(Environment e) {
-        throw new StoneException("cannot eval: " + toString(), this);
+        // throw new StoneException("cannot eval: " + toString(), this);
+        return null;
     }
 
     @Override
