@@ -1,7 +1,13 @@
-def inc(n: Int): Int {
-    n + 1
+def fib(n: Int): Int {
+    if n < 2 {
+        n
+    } else {
+        fib(n-1) + fib(n-2)
+    }
 }
 
-// calc i + 1
-var i: Int = 1
-print(inc(i))
+// calc fib(33)
+var start: Int = currentTime()
+print(fib(33))
+var end: Int = currentTime() - start
+print("time:" + end)

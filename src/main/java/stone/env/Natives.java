@@ -1,6 +1,7 @@
 package stone.env;
 
 import stone.NativeFunction;
+import stone.TypeInfo;
 import stone.exception.StoneException;
 
 import javax.swing.*;
@@ -16,12 +17,25 @@ public class Natives {
         return env;
     }
 
+    public TypeEnv typeEnvironment(TypeEnv env) {
+        appendNativesType(env);
+        return env;
+    }
+
     protected void appendNatives(Environment env) {
         append(env, "print", Natives.class, "print", Object.class);
         append(env, "read", Natives.class, "read");
         append(env, "length", Natives.class, "length", String.class);
         append(env, "toInt", Natives.class, "toInt", Object.class);
         append(env, "currentTime", Natives.class, "currentTime");
+    }
+
+    protected void appendNativesType(TypeEnv env) {
+        appendType(env, "print",  TypeInfo.function(TypeInfo.INT, TypeInfo.ANY));
+        appendType(env, "read", TypeInfo.function(TypeInfo.STRING));
+        appendType(env, "length", TypeInfo.function(TypeInfo.INT, TypeInfo.STRING));
+        appendType(env, "toInt", TypeInfo.function(TypeInfo.INT, TypeInfo.ANY));
+        appendType(env, "currentTime", TypeInfo.function(TypeInfo.INT));
     }
 
     protected void append(Environment env, String name, Class<?> clazz,
@@ -34,6 +48,10 @@ public class Natives {
                     + methodName);
         }
         env.put(name, new NativeFunction(methodName, m));
+    }
+
+    protected void appendType(TypeEnv env, String name, TypeInfo.FunctionType type) {
+        env.put(name, type);
     }
 
     // native methods

@@ -22,12 +22,18 @@ public class FileRunner {
     public static void runForFile(String filePath) throws FileNotFoundException, ParseException, TypeException {
         FileReader fileReader = new FileReader(filePath);
         Lexer l = new Lexer(fileReader);
-        BasicEnv e = new BasicEnv();
-        new Natives().environment(e);
         TypeParser p = new TypeParser();
+
+        BasicEnv e = new BasicEnv();
+        TypeEnv typeEnv = new TypeEnv();
+
+        Natives natives = new Natives();
+        natives.environment(e);
+        natives.typeEnvironment(typeEnv);
 
         while(l.peek(0) != Token.EOF) {
             ASTree t = p.parse(l);
+            t.typeCheck(typeEnv);
             t.eval(e);
         }
     }
