@@ -1,8 +1,11 @@
 package stone.ast;
 
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.MethodVisitor;
 import stone.TypeInfo;
 import stone.env.Environment;
 import stone.env.TypeEnv;
+import stone.env.VmEnv;
 import stone.exception.TypeException;
 
 import java.util.List;
@@ -31,6 +34,30 @@ public class PrimaryExpr extends ASTList {
 
     public boolean hasPostfix(int nest) {
         return numChildren() - nest > 1;
+    }
+
+    @Override
+    public void compileToJvm(ClassWriter cw, MethodVisitor mw, VmEnv e) {
+        compileToJvm(cw, mw, e, 0);
+    }
+
+    public Object compileToJvm(ClassWriter cw, MethodVisitor mw, VmEnv e, int nest) {
+        if (hasPostfix(nest)) {
+            Object target = compileToJvm(cw, mw, e, nest+1);
+            return postfix(nest).compileToJvm(cw, mw, e, target);
+        }
+
+        // 获取函数或类信息
+        ASTree op = operand();
+        if(op instanceof Name) {
+            String name = ((Name) op).name();
+            if(e.hasFun(name)) {
+                return e.getFun(name);
+            } else if(e.hasNativeFun(name)) {
+                return e.getNativeFun(name);
+            }
+        }
+        return null;
     }
 
     @Override

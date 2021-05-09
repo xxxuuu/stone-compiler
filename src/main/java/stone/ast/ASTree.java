@@ -1,8 +1,11 @@
 package stone.ast;
 
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.MethodVisitor;
 import stone.TypeInfo;
 import stone.env.Environment;
 import stone.env.TypeEnv;
+import stone.env.VmEnv;
 import stone.exception.TypeException;
 
 import java.util.Iterator;
@@ -25,6 +28,8 @@ public abstract class ASTree implements Iterable<ASTree> {
     public abstract Object eval(Environment e);
     /** 类型检查 */
     public abstract TypeInfo typeCheck(TypeEnv e) throws TypeException;
+    /** 编译到JVM */
+    public abstract void compileToJvm(ClassWriter cw, MethodVisitor mw, VmEnv e);
     @Override
     public Iterator<ASTree> iterator() {
         return children();

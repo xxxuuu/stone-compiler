@@ -1,8 +1,11 @@
 package stone.ast;
 
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.MethodVisitor;
 import stone.TypeInfo;
 import stone.env.Environment;
 import stone.env.TypeEnv;
+import stone.env.VmEnv;
 import stone.exception.TypeException;
 
 import java.util.List;
@@ -33,4 +36,6 @@ public abstract class Postfix extends ASTList {
      * @throws  TypeException 类型检查错误
      */
     public abstract TypeInfo typeCheck(TypeEnv e, TypeInfo target) throws TypeException;
+    /** 编译到JVM */
+    public abstract Object compileToJvm(ClassWriter cw, MethodVisitor mw, VmEnv e, Object target);
 }

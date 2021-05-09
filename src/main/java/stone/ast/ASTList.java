@@ -1,8 +1,11 @@
 package stone.ast;
 
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.MethodVisitor;
 import stone.TypeInfo;
 import stone.env.Environment;
 import stone.env.TypeEnv;
+import stone.env.VmEnv;
 import stone.exception.StoneException;
 import stone.exception.TypeException;
 
@@ -56,6 +59,11 @@ public class ASTList extends ASTree {
     @Override
     public TypeInfo typeCheck(TypeEnv e) throws TypeException {
         return null;
+    }
+
+    @Override
+    public void compileToJvm(ClassWriter cw, MethodVisitor mw, VmEnv e) {
+
     }
 
     @Override

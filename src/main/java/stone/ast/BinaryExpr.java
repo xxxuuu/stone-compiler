@@ -1,14 +1,19 @@
 package stone.ast;
 
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.MethodVisitor;
 import stone.Const;
 import stone.TypeInfo;
 import stone.env.Environment;
 import stone.env.TypeEnv;
+import stone.env.VmEnv;
 import stone.exception.StoneException;
 import stone.StoneObject;
 import stone.exception.TypeException;
 
 import static stone.StoneObject.AccessException;
+import static org.objectweb.asm.Opcodes.*;
 
 import java.util.List;
 
@@ -46,6 +51,86 @@ public class BinaryExpr extends ASTList {
             Object lvalue = left().eval(e);
             Object rvalue = right().eval(e);
             return computeOp(lvalue, op, rvalue);
+        }
+    }
+
+    @Override
+    public void compileToJvm(ClassWriter cw, MethodVisitor mw, VmEnv e) {
+        String op = operator();
+        if("=".equals(op)) {
+            // TODO: Array
+            ASTree l = left();
+            if(l instanceof Name) {
+                String name = ((Name) l).name();
+                e.addVar(name);
+                right().compileToJvm(cw, mw, e);
+                mw.visitVarInsn(ISTORE, e.getIndex(name));
+            }
+            return;
+        }
+        left().compileToJvm(cw, mw, e);
+        right().compileToJvm(cw, mw, e);
+
+        Label label1 = new Label();
+        Label label2 = new Label();
+        switch (op) {
+            case "+":
+                mw.visitInsn(IADD);
+                break;
+            case "-":
+                mw.visitInsn(ISUB);
+                break;
+            case "*":
+                mw.visitInsn(IMUL);
+                break;
+            case "/":
+                mw.visitInsn(IDIV);
+                break;
+            case "%":
+                mw.visitInsn(IREM);
+                break;
+            case "==":
+                mw.visitJumpInsn(IF_ICMPEQ, label1);
+                mw.visitInsn(ICONST_0);
+                mw.visitJumpInsn(GOTO, label2);
+                mw.visitLabel(label1);
+                mw.visitInsn(ICONST_1);
+                mw.visitLabel(label2);
+                break;
+            case ">":
+                mw.visitJumpInsn(IF_ICMPGT, label1);
+                mw.visitInsn(ICONST_0);
+                mw.visitJumpInsn(GOTO, label2);
+                mw.visitLabel(label1);
+                mw.visitInsn(ICONST_1);
+                mw.visitLabel(label2);
+                break;
+            case "<":
+                mw.visitJumpInsn(IF_ICMPLT, label1);
+                mw.visitInsn(ICONST_0);
+                mw.visitJumpInsn(GOTO, label2);
+                mw.visitLabel(label1);
+                mw.visitInsn(ICONST_1);
+                mw.visitLabel(label2);
+                break;
+            case ">=":
+                mw.visitJumpInsn(IF_ICMPGE, label1);
+                mw.visitInsn(ICONST_0);
+                mw.visitJumpInsn(GOTO, label2);
+                mw.visitLabel(label1);
+                mw.visitInsn(ICONST_1);
+                mw.visitLabel(label2);
+                break;
+            case "<=":
+                mw.visitJumpInsn(IF_ICMPLE, label1);
+                mw.visitInsn(ICONST_0);
+                mw.visitJumpInsn(GOTO, label2);
+                mw.visitLabel(label1);
+                mw.visitInsn(ICONST_1);
+                mw.visitLabel(label2);
+                break;
+            default:
+                throw new StoneException("bad operator", this);
         }
     }
 

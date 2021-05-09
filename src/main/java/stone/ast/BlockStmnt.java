@@ -1,8 +1,11 @@
 package stone.ast;
 
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.MethodVisitor;
 import stone.TypeInfo;
 import stone.env.Environment;
 import stone.env.TypeEnv;
+import stone.env.VmEnv;
 import stone.exception.TypeException;
 
 import java.util.List;
@@ -15,6 +18,15 @@ public class BlockStmnt extends ASTList {
     TypeInfo type;
 
     public BlockStmnt(List<ASTree> c) { super(c); }
+
+    @Override
+    public void compileToJvm(ClassWriter cw, MethodVisitor mw, VmEnv e) {
+        for(ASTree t: this) {
+            if (!(t instanceof NullStmnt)) {
+                t.compileToJvm(cw, mw, e);
+            }
+        }
+    }
 
     @Override
     public Object eval(Environment e) {

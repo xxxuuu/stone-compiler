@@ -1,12 +1,19 @@
 package stone.ast;
 
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.MethodVisitor;
 import stone.Const;
 import stone.TypeInfo;
 import stone.env.Environment;
 import stone.env.TypeEnv;
+import stone.env.VmEnv;
 import stone.exception.TypeException;
+import org.objectweb.asm.Label;
 
 import java.util.List;
+
+import static org.objectweb.asm.Opcodes.*;
+import static org.objectweb.asm.Opcodes.ICONST_1;
 
 /**
  * @author XUQING
@@ -27,6 +34,24 @@ public class IfStmnt extends ASTList {
     public String toString() {
         return "(if " + condition() + " " + thenBlock()
                 + " else " + elseBlock() + ")";
+    }
+
+    @Override
+    public void compileToJvm(ClassWriter cw, MethodVisitor mw, VmEnv e) {
+        Label label1 = new Label();
+        Label label2 = new Label();
+        ASTree elseAst = elseBlock();
+
+        condition().compileToJvm(cw, mw, e);
+        // 条件为0(false)跳转到else块
+        mw.visitJumpInsn(IFEQ, label1);
+        thenBlock().compileToJvm(cw, mw, e);
+        mw.visitJumpInsn(GOTO, label2);
+        mw.visitLabel(label1);
+        if(elseAst != null) {
+            elseAst.compileToJvm(cw, mw, e);
+        }
+        mw.visitLabel(label2);
     }
 
     @Override
