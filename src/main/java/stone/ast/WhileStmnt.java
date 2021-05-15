@@ -1,12 +1,18 @@
 package stone.ast;
 
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.MethodVisitor;
 import stone.Const;
 import stone.TypeInfo;
 import stone.env.Environment;
 import stone.env.TypeEnv;
+import stone.env.VmEnv;
 import stone.exception.TypeException;
 
 import java.util.List;
+
+import static org.objectweb.asm.Opcodes.*;
 
 /**
  * @author XUQING
@@ -22,6 +28,19 @@ public class WhileStmnt extends ASTList {
     @Override
     public String toString() {
         return "(while " + condition() + " " + body() + ")";
+    }
+
+    @Override
+    public void compileToJvm(ClassWriter cw, MethodVisitor mw, VmEnv e) {
+        Label l1 = new Label();
+        Label l2 = new Label();
+
+        mw.visitLabel(l1);
+        condition().compileToJvm(cw, mw, e);
+        mw.visitJumpInsn(IFEQ, l2);
+        body().compileToJvm(cw, mw, e);
+        mw.visitJumpInsn(GOTO, l1);
+        mw.visitLabel(l2);
     }
 
     @Override
