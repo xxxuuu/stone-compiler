@@ -38,11 +38,14 @@ public class DefStmnt extends ASTList {
     }
 
     public TypeTag type() {
+        if(child(2) instanceof BlockStmnt) {
+            return null;
+        }
         return (TypeTag) child(2);
     }
 
     public BlockStmnt body() {
-        return (BlockStmnt)child(3);
+        return (BlockStmnt)child(this.chilren.size()-1);
     }
 
     @Override

@@ -17,7 +17,13 @@ public class ParameterList extends ASTList {
     }
 
     public String name(int i) {
-        return ((ASTLeaf)child(i).child(0)).token().getText();
+        var child = child(i);
+
+        if(child instanceof ASTLeaf) {
+            return ((ASTLeaf)child(i)).token().getText();
+        } else {
+            return ((ASTLeaf) child(i).child(0)).token().getText();
+        }
     }
 
     public TypeTag typeTag(int i) {
